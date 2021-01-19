@@ -10,16 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Str;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/{any}', 'SpaController@index')->where('any', '.*');
 
 /** Access 토큰관련 라우트 **/
 // Route::get('/redirect', function (Request $request) {
