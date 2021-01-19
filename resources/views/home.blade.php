@@ -20,9 +20,13 @@
         </div>
         <div class="col-md-8">
             <div class="card">
-                <passport-clients></passport-clients>
-                <passport-authorized-clients></passport-authorized-clients>
-                <passport-personal-access-tokens></passport-personal-access-tokens>
+                <v-app>
+                    <passport-clients></passport-clients>
+                    <passport-authorized-clients></passport-authorized-clients>
+                    <passport-personal-access-tokens></passport-personal-access-tokens>
+
+                    <my-vuetify :current-user="{{ auth()->id() }}"></my-vuetify>
+                </v-app>
             </div>
         </div>
     </div>
