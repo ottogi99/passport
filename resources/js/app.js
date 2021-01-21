@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-// require('./bootstrap');
+require('./bootstrap');
 
 // window.Vue = require('vue');
 
@@ -51,34 +51,74 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+
+// Vuex 주입
+import store from './store'
 
 import App from './pages/App'
 import Hello from './pages/Hello'
 import Home from './pages/Home'
 
+
+// import pages
+import SigunListPage from './pages/SigunListPage'
+import NonghyupListPage from './pages/NonghyupListPage'
+
+// Post pages
+import PostListPage from './pages/PostListPage'
+import PostViewPage from './pages/PostViewPage'
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        // {
+        //     path: '/',
+        //     name: 'home',
+        //     component: Home
+        // },
+        // {
+        //     path: '/hello',
+        //     name: 'hello',
+        //     component: Hello,
+        // }
         {
             path: '/',
-            name: 'home',
-            component: Home
+            name: 'PostListPage',
+            component: PostListPage
         },
         {
-            path: '/hello',
-            name: 'hello',
-            component: Hello,
+            path: '/siguns',
+            name: 'SigunListPage',
+            component: SigunListPage
+        },
+        {
+            path: '/nonghyups',
+            name: 'NonghyupListPage',
+            component: NonghyupListPage
+        },
+        {
+            path: '/posts',
+            name: 'PostListPage',
+            component: PostListPage
+        },
+        {
+            path: '/post/:postId',
+            name: 'PostViewPage',
+            component: PostViewPage
         }
-    ]
+    ],
 })
 
 const app = new Vue({
     el: '#app',
-    components: { App },
+    // components: { App },
+    render:h => h(App),
     router,
+    store,
     vuetify: new Vuetify(),
 
 });

@@ -16,3 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('siguns')->group(function () {
+    Route::get('/', 'SigunController@index');
+});
+
+Route::prefix('nonghyups')->group(function () {
+    Route::get('/', 'NonghyupController@index');
+});
+
+Route::prefix('posts')->group(function () {
+    Route::get('/', 'PostController@index');
+});
