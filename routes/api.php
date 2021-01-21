@@ -26,5 +26,9 @@ Route::prefix('nonghyups')->group(function () {
 });
 
 Route::prefix('posts')->group(function () {
-    Route::get('/', 'PostController@index');
+    Route::get('/{postId}', 'PostController@show');
 });
+
+// Route::prefix('posts')->group(function () {
+//     Route::get('/{postId?}', 'PostController@index'); // 선택적 파라미터 function index(postId = 0)
+// });

@@ -106,10 +106,11 @@ const router = new VueRouter({
             component: PostListPage
         },
         {
-            path: '/post/:postId',
+            path: '/posts/:postId',
             name: 'PostViewPage',
-            component: PostViewPage
-        }
+            component: PostViewPage,
+            props: true
+        },
     ],
 })
 

@@ -15,4 +15,20 @@ class PostController extends Controller
             'posts' => $posts,
         ]);
     }
+
+    public function show($id)
+    {
+        $post = Post::find($id);
+        // $post = Post::where('active', 1)->first();
+
+        // return response()->json([
+        //     'message' => 'Not Found!',
+        // ], 404);
+
+        return response()->json([
+            'post' => $post,
+        ]);
+
+        // return response()->setStatusCode(201);
+    }
 }
