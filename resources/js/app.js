@@ -48,6 +48,7 @@ require('./bootstrap');
 
 
 // 기존의 내용 대체
+import '@mdi/font/css/materialdesignicons.css'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
@@ -71,6 +72,8 @@ import NonghyupListPage from './pages/NonghyupListPage'
 // Post pages
 import PostListPage from './pages/PostListPage'
 import PostViewPage from './pages/PostViewPage'
+import Signup from './pages/Signup'
+import Signin from './pages/Signin'
 
 const router = new VueRouter({
     mode: 'history',
@@ -111,6 +114,16 @@ const router = new VueRouter({
             component: PostViewPage,
             props: true
         },
+        {
+            path: '/signup',
+            name: 'Signup',
+            component: Signup
+        },
+        {
+            path: '/signin',
+            name: 'Signin',
+            component: Signin
+        },
     ],
 })
 
@@ -120,6 +133,9 @@ const app = new Vue({
     render:h => h(App),
     router,
     store,
-    vuetify: new Vuetify(),
-
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: 'mdi',
+        },
+    }),
 });
