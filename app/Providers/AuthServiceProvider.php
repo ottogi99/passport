@@ -30,6 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
         Passport::useClientModel(Client::class);
 
+        Passport::$ignoreCsrfToken = true;
+
         // 묵시적 Grant 토큰
         // Passport::enableImplicitGrant();   # enableImplicitGrant 메소드를 호출
     }

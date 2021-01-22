@@ -21,9 +21,11 @@
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
+
 Route::get('/time', function () {
     return now()->toDateTimeString();
 });
+
 Route::get('/{any}', 'SpaController@index')->where('any', '.*');
 
 /** Access 토큰관련 라우트 **/

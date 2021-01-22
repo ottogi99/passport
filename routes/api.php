@@ -35,14 +35,16 @@ Route::prefix('posts')->group(function () {
 
 
 // Route::get('/callback', function (Request $request) {
-Route::post('/auth/signin', function (Request $request) {
+Route::post('/signin', function (Request $request) {
     $http = new GuzzleHttp\Client;
     
-    $response = $http->post('http://passport.test/oauth/token', [
+    // $response = $http->post('http://passport.test/oauth/token', [
+    $response = $http->post('http://vuespa.test/oauth/token', [
         'form_params' => [
             'grant_type' => 'password',
             'client_id' => '2',
-            'client_secret' => 'DiM7k1JuL3oUga9TitoOcQaTUe2A7ZcTiCjSz1U4',
+            // 'client_secret' => 'DiM7k1JuL3oUga9TitoOcQaTUe2A7ZcTiCjSz1U4',
+            'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',            
             'username' => 'sunghwa@onthesys.com',
             'password' => 'wjdtjdghk1',
             'scope' => '',
