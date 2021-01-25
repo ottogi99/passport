@@ -4,7 +4,12 @@ import {
     FETCH_POST,
     SET_ACCESS_TOKEN,
     SET_MY_INFO,
+    DESTROY_ACCESS_TYPE,
+    DESTROY_MY_INFO,
+    DESTROY_ACCESS_TOKEN,
 } from './mutations-types'
+
+import Cookies from 'js-cookie'
 
 export default {
     [FETCH_SIGUN_LIST] (state, siguns) {
@@ -23,6 +28,7 @@ export default {
         if (accessToken) {
             state.accessToken = accessToken
             axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+            Cookies.set('accessToken', accessToken)
         }
     },
 
@@ -31,4 +37,14 @@ export default {
             state.me = me
         }
     },
+
+    [DESTROY_ACCESS_TOKEN] (state) {
+        state.accessToken = ''
+        delete axios.defaults.headers.common.Authorization
+        Cookies.remove('accessToken')
+    },
+
+    [DESTROY_MY_INFO] (state) {
+        state.me = null
+    }
 }

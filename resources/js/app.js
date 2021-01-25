@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 
-// window.Vue = require('vue');
+window.Vue = require('vue');
 
 // /**
 //  * The following block of code may be used to automatically register your
@@ -75,6 +75,15 @@ import PostViewPage from './pages/PostViewPage'
 import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 
+// AppHeader 컴포넌트를 추가한다.
+import AppHeader from './components/AppHeader'
+
+import Cookies from 'js-cookie'
+const savedToken = Cookies.get('accessToken')
+if (savedToken) {
+    store.dispatch('signinByToken', savedToken)
+}
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -88,15 +97,19 @@ const router = new VueRouter({
         //     name: 'hello',
         //     component: Hello,
         // }
-        {
-            path: '/',
-            name: 'PostListPage',
-            component: PostListPage
-        },
+        // {
+        //     path: '/',
+        //     name: 'PostListPage',
+        //     component: PostListPage
+        // },
         {
             path: '/siguns',
             name: 'SigunListPage',
-            component: SigunListPage
+            // component: SigunListPage
+            components: {
+                header: AppHeader,
+                default: SigunListPage,
+            }
         },
         {
             path: '/nonghyups',
@@ -106,23 +119,43 @@ const router = new VueRouter({
         {
             path: '/posts',
             name: 'PostListPage',
-            component: PostListPage
+            components: {
+                header: AppHeader,
+                default: SigunListPage,
+            }
         },
         {
             path: '/posts/:postId',
             name: 'PostViewPage',
-            component: PostViewPage,
-            props: true
+            components: {
+                header: AppHeader,
+                default: PostViewPage,
+            },
+            // component: PostViewPage,
+            // props값 역시 대상 components의 이름으로 수정한다.
+            props: {
+                default: true
+            }
         },
         {
             path: '/signup',
             name: 'Signup',
-            component: Signup
+            // components 속성을 사용하면 여러 개의 router-view에 컴포넌트를 렌더할 수 있다.
+            components: {
+                header: AppHeader,
+                default: Signup,
+            }
+            // component: Signup
         },
         {
             path: '/signin',
             name: 'Signin',
-            component: Signin
+            // components 속성이 아니라 component를 사용하면 자동으로 이름이 없는 router-view에만 컴포넌트를 렌더한다.
+            // component: Signin
+            components: {
+                header: AppHeader,
+                default: Signin,
+            }
         },
     ],
 })

@@ -35,14 +35,20 @@ Route::prefix('posts')->group(function () {
 
 
 // Route::get('/callback', function (Request $request) {
-Route::post('/auth/signin', function (Request $request) {
+Route::post('/signin', function (Request $request) {
     $http = new GuzzleHttp\Client;
     
-    $response = $http->post('http://passport.test/oauth/token', [
+    // $response = $http->post('http://passport.test/oauth/token', [
+    $response = $http->post('http://vuespa.test/oauth/token', [
         'form_params' => [
             'grant_type' => 'password',
             'client_id' => '2',
-            'client_secret' => 'DiM7k1JuL3oUga9TitoOcQaTUe2A7ZcTiCjSz1U4',
+            // Asus labtop in office
+            'client_secret' => 'DfPSI4j2SW9jpbygy2eNjSxhtQyNbxqt9cu2f542',
+            // Lenovo desktop at home
+            // 'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',
+            // Lenovo T14s 용
+            // 'client_secret' => 'IW0MnIqf2gbFPLGAL9LACWChUXsDmtrMjzTW6x2r',
             'username' => 'sunghwa@onthesys.com',
             'password' => 'wjdtjdghk1',
             'scope' => '',
