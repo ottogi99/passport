@@ -5,6 +5,7 @@
             <post-list-component :posts="posts"></post-list-component>
         </div>
         <v-btn color="success">Success</v-btn>
+        <router-link :to="{ name: 'PostCreatePage' }">글쓰기</router-link>
     </div>
 </template>
 

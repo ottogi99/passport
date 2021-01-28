@@ -25,8 +25,12 @@ Route::prefix('nonghyups')->group(function () {
     Route::get('/', 'NonghyupController@index');
 });
 
-Route::prefix('posts')->group(function () {
+Route::middleware('auth:api')->prefix('posts')->group(function () {
+    Route::get('/', 'Postcontroller@index');
     Route::get('/{postId}', 'PostController@show');
+    Route::post('/', 'PostController@store');
+    Route::patch('/{postId}', 'PostController@update');
+    Route::delete('/{postId}', 'PostController@destroy');
 });
 
 // Route::prefix('posts')->group(function () {
