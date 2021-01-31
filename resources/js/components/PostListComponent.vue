@@ -22,7 +22,7 @@
                             {{ post.title }}
                         </router-link>
                     </td>
-                    <td>{{ post.writer }}</td>
+                    <td>{{ post.user.name }}</td>
                     <td>{{ post.created_at }}</td>
                 </tr>
             </tbody>

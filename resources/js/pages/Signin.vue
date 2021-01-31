@@ -32,7 +32,7 @@ export default {
                 })
         },
 
-        ...mapActions([ 'signin' ])
+        ...mapActions([ 'signin' ]),
     },
 }
 </script>

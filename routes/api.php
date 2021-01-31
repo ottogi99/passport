@@ -26,6 +26,7 @@ Route::prefix('nonghyups')->group(function () {
 });
 
 Route::prefix('posts')->group(function () {
+    Route::get('/', 'PostController@index');
     Route::get('/{postId}', 'PostController@show');
 });
 
@@ -43,8 +44,12 @@ Route::post('/signin', function (Request $request) {
         'form_params' => [
             'grant_type' => 'password',
             'client_id' => '2',
+            // Asus labtop in office
             // 'client_secret' => 'DiM7k1JuL3oUga9TitoOcQaTUe2A7ZcTiCjSz1U4',
-            'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',            
+            // Lenovo desktop at home
+            // 'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',
+            // Lenovo T14s 용
+            'client_secret' => 'IW0MnIqf2gbFPLGAL9LACWChUXsDmtrMjzTW6x2r',
             'username' => 'sunghwa@onthesys.com',
             'password' => 'wjdtjdghk1',
             'scope' => '',
