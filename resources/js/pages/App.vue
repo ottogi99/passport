@@ -8,11 +8,7 @@
         </p> -->
 
         <div class="container">
-<<<<<<< HEAD
             <router-view></router-view> <!-- ì´ë¦„ì´ ì—†ëŠ” router-view ì»´í¬ë„ŒíŠ¸ëŠ” ìžë™ìœ¼ë¡œ defaultë¼ëŠ” ì´ë¦„ì„ ë¶€ì—¬ë°›ëŠ”ë‹¤. -->
-=======
-            <router-view></router-view> <!-- ÀÌ¸§ÀÌ ¾ø´Â router-view ÄÄÆ÷³ÍÆ®´Â ÀÚµ¿À¸·Î default¶ó´Â ÀÌ¸§À» ºÎ¿©¹Þ´Â´Ù. -->
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
         </div>
     </v-app>
 </template>

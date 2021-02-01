@@ -1,7 +1,7 @@
 <template>
     <div class="post-view-page">
         <!-- 게시물이 있는 경우에는 컴포넌트가 노출된다. -->
-        <post-view-component v-if="post" :post="post"/>
+        <post-view v-if="post" :post="post"/>
         <p v-else>게시글 불러오는 중...</p>
         <router-link :to="{ name: 'PostEditPage', params: { postId }}">수정</router-link>
         <button @click="onDelete">삭제</button>
@@ -11,13 +11,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PostViewComponent from '../components/PostViewComponent.vue'
+import PostView from '../components/PostView.vue'
 
 export default {
     name: 'PostViewPage',
 
     components: {
-        PostViewComponent,
+        PostView,
     },
 
     props: {

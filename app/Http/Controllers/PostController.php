@@ -5,11 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use App\Post;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $posts = Post::all();
+
+    //     return response()->json([
+    //         'posts' => $posts,
+    //     ], 201);
+    // }
+
+    // 기간검색
+    public function index(Request $request)
     {
+        // if (!empty($request->get('start_date'))) {
+        //     $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('start_date'));
+        // } else {
+        //     $start_date = Carbon::now();
+        // }
+
+        // if (!empty($request->get('end_date'))) {
+        //     $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('end_date'));
+        // } else {
+        //     $end_date = $start_date->copy()->addMonths(1);
+        // }
+
+        // $posts = Post::whereBetween('created_at', [
+        //     $start_date->startOfDay(),
+        //     $end_date->endOfDay()
+        // ])->orderBy('created_at', 'desc')->get();
+
         $posts = Post::all();
 
         return response()->json([
@@ -29,26 +57,22 @@ class PostController extends Controller
 
         return response()->json([
             'post' => $post,
-        ])->setStausCode(201);
+        ],201);//->setStausCode(201);
 
         // return response()->setStatusCode(201);
     }
 
-<<<<<<< HEAD
 
-=======
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
     public function store(Request $request)
     {
         $rules = [
             'title' => ['required'],
-<<<<<<< HEAD
             'content' => ['required', 'min:10'],
         ];
 
@@ -72,40 +96,39 @@ class PostController extends Controller
             return back()->with('flash_message', '글이 저장되지 않았습니다.')->withInput();
         }
 
-        return redirect(route('articles.index'))->with('flash_message', '작성하신 글이 저장되었습니다.');
-    }
+    //     return redirect(route('articles.index'))->with('flash_message', '작성하신 글이 저장되었습니다.');
+    // }
 
-=======
-            'contents' => ['required']
-        ];
+    //         'contents' => ['required']
+    //     ];
 
-        $messages = [
-            'required' => ':attribute은(는) 필수 입력 항목입니다.',
-        ];
+    //     $messages = [
+    //         'required' => ':attribute은(는) 필수 입력 항목입니다.',
+    //     ];
 
-        $attributes = [
-            'title' => '제목',
-            'contents' => '내용'
-        ];
+    //     $attributes = [
+    //         'title' => '제목',
+    //         'contents' => '내용'
+    //     ];
 
-        $this->validate($request, $rules, $messages, $attributes);
+    //     $this->validate($request, $rules, $messages, $attributes);
 
-        $user = auth()->user();
-        Log::info($user);
+    //     $user = auth()->user();
+    //     Log::info($user);
 
-        $payload = array_merge($request->all(), [
-          'writer' => $user->id,
-        ]);
+    //     $payload = array_merge($request->all(), [
+    //       'writer' => $user->id,
+    //     ]);
 
-        try {
-            $post = \App\Post::create($payload);
-        } catch (\Exception $e) {
-            Log::error($e);
+    //     try {
+    //         $post = \App\Post::create($payload);
+    //     } catch (\Exception $e) {
+    //         Log::error($e);
 
-            return response()->json([
-                'message' => 'Not Found!',
-            ], 404);
-        }
+    //         return response()->json([
+    //             'message' => 'Not Found!',
+    //         ], 404);
+    //     }
 
         return response()->json([
             'post' => $post,
@@ -139,5 +162,4 @@ class PostController extends Controller
 
         return response()->json([], 204);
     }
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
 }

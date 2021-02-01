@@ -2,7 +2,7 @@
     <div class="post-list-page">
         <h1>포스트 게시글</h1>
         <div>
-            <post-list-component :posts="posts"></post-list-component>
+            <post-list :posts="posts" :loading="loading"></post-list>
         </div>
         <v-btn color="success">Success</v-btn>
         <router-link :to="{ name: 'PostCreatePage' }">글쓰기</router-link>
@@ -10,27 +10,29 @@
 </template>
 
 <script>
-import PostListComponent from '../components/PostListComponent'
+import PostList from '../components/PostList'
 
 export default {
     name: 'PostListPage',
 
     components: {
-        PostListComponent
+        PostList
     },
 
     data () {
         return {
-            posts: []
+            posts: [],
+            loading: true,
         }
     },
     
     created () {
         axios.get('/api/posts')
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 this.posts = res.data.posts
-                console.log(this.posts)
+                // console.log(this.posts)
+                this.loading = false
             })
     }
 }

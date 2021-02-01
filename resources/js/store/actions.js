@@ -23,6 +23,7 @@ export default {
     },
 
     fetchPost({ commit }, postId) {
+        console.log(`/api/posts/${postId}`)
         return axios.get(`/api/posts/${postId}`).then(res => {
             commit(FETCH_POST, res.data.post)
         })
