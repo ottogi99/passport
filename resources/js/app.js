@@ -72,12 +72,8 @@ import NonghyupListPage from './pages/NonghyupListPage'
 // Post pages
 import PostListPage from './pages/PostListPage'
 import PostViewPage from './pages/PostViewPage'
-<<<<<<< HEAD
 import PostCreatePage from './pages/PostCreatePage' 
-=======
-import PostCreatePage from './pages/PostCreatePage'
 import PostEditPage from './pages/PostEditPage'
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
 import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 
@@ -86,10 +82,6 @@ import AppHeader from './components/AppHeader'
 
 import Cookies from 'js-cookie'
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -131,47 +123,6 @@ const router = new VueRouter({
                 default: Signup,
             }
             // component: Signup
-<<<<<<< HEAD
-        },
-        {
-            path: '/signin',
-            name: 'Signin',
-            // components 속성이 아니라 component를 사용하면 자동으로 이름이 없는 router-view에만 컴포넌트를 렌더한다.
-            // component: Signin
-            components: {
-                header: AppHeader,
-                default: Signin,
-            }
-        },
-        {
-            path: '/posts',
-            name: 'PostListPage',
-            components: {
-                header: AppHeader,
-                // default: SigunListPage,
-                default: PostListPage,
-            }
-        },
-        {
-            path: '/post/create',
-            name: 'PostCreatePage',
-            components: {
-                header: AppHeader,
-                default: PostCreatePage,
-            },
-            // beforeEnter 가드 훅을 추가한다.
-            beforeEnter (to, from, next) {
-                const { isAuthorized } = store.getters
-                if (!isAuthorized) {
-                    alert('로그인이 필요합니다!')
-                    next({ name: 'Signin' })
-                }
-                next()
-            }
-        },
-        {
-            path: '/posts/:postId',
-=======
         },
         {
             path: '/signin',
@@ -250,7 +201,6 @@ const router = new VueRouter({
         },
         {
             path: '/post/:postId',
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
             name: 'PostViewPage',
             components: {
                 header: AppHeader,
@@ -269,11 +219,8 @@ const router = new VueRouter({
 // if (savedToken) {
 //     store.dispatch('signinByToken', savedToken)
 // }
-<<<<<<< HEAD
 // 비동기 처리를 위한 함수를 생성한다.
-=======
 
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
 function init () {
     const savedToken = Cookies.get('accessToken')
     if (savedToken) {
@@ -281,7 +228,6 @@ function init () {
         return store.dispatch('signinByToken', savedToken)
     } else {
         // 토큰이 존재하지 않는다면 바로 Promise를 성공시킨다.
-<<<<<<< HEAD
         return Promise.resolve();
     }
 }
@@ -302,12 +248,6 @@ init().then(res => {
     });
 })
 
-=======
-        return Promise.resolve()
-    }
-}
-
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
 // const app = new Vue({
 //     el: '#app',
 //     // components: { App },
@@ -319,21 +259,18 @@ init().then(res => {
 //             iconfont: 'mdi',
 //         },
 //     }),
-<<<<<<< HEAD
 // });
-=======
 // });
-init().then(res => {
-    new Vue({
-        el: '#app',
-        render:h => h(App),
-        router,
-        store,
-        vuetify: new Vuetify({
-            icons: {
-                iconfont: 'mdi',
-            },
-        }),
-    });
-})
->>>>>>> d43eecaa16e6289be5137ad99a7d2311ad07544d
+// init().then(res => {
+//     new Vue({
+//         el: '#app',
+//         render:h => h(App),
+//         router,
+//         store,
+//         vuetify: new Vuetify({
+//             icons: {
+//                 iconfont: 'mdi',
+//             },
+//         }),
+//     });
+// })
