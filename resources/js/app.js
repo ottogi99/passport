@@ -80,6 +80,14 @@ import Signin from './pages/Signin'
 // AppHeader 컴포넌트를 추가한다.
 import AppHeader from './components/AppHeader'
 
+// Vuetify 학습
+import SearchPage from './pages/SearchPage'
+import ComboboxPage from './pages/ComboboxPage'
+import FileInputPage from './pages/FileInputPage'
+import FormsPage from './pages/FormsPage'
+import SelectsPage from './pages/SelectsPage'
+
+
 import Cookies from 'js-cookie'
 
 const router = new VueRouter({
@@ -210,6 +218,46 @@ const router = new VueRouter({
             // props값 역시 대상 components의 이름으로 수정한다.
             props: {
                 default: true
+            }
+        },
+        {
+            path: '/search',
+            name: 'SearchPage',
+            components: {
+                header: AppHeader,
+                default: SearchPage,
+            }
+        },
+        {
+            path: '/searchcombo',
+            name: 'ComboboxPage',
+            components: {
+                header: AppHeader,
+                default: ComboboxPage,
+            }
+        },
+        {
+            path: '/upload',
+            name: 'FileInputPage',
+            components: {
+                header: AppHeader,
+                default: FileInputPage,
+            }
+        },
+        {
+            path: '/forms',
+            name: 'FormsPage',
+            components: {
+                header: AppHeader,
+                default: FormsPage,
+            }
+        },
+        {
+            path: '/selects',
+            name: 'SelectsPage',
+            components: {
+                header: AppHeader,
+                default: SelectsPage,
             }
         },
     ],
