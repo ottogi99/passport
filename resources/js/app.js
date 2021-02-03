@@ -86,6 +86,7 @@ import ComboboxPage from './pages/ComboboxPage'
 import FileInputPage from './pages/FileInputPage'
 import FormsPage from './pages/FormsPage'
 import SelectsPage from './pages/SelectsPage'
+import TopSearchPage from './pages/TopSearchPage'
 
 
 import Cookies from 'js-cookie'
@@ -258,6 +259,14 @@ const router = new VueRouter({
             components: {
                 header: AppHeader,
                 default: SelectsPage,
+            }
+        },
+        {
+            path: '/toolbar',
+            name: 'TopSearchPage',
+            components: {
+                // header: AppHeader,
+                default: TopSearchPage,
             }
         },
     ],

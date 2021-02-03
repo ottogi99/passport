@@ -347,6 +347,10 @@ export default {
                             title: '셀렉트',
                             to: '/selects',
                         },
+                        {
+                            title: '툴바',
+                            to: '/toolbar',
+                        },
                     ],
                 },
             ],
@@ -394,5 +398,11 @@ export default {
 </script>
 
 <style scoped>
-
+/* 전체 범위에서 input box text 폰트 변경할 경우 scoped 지우고 해야 함 */
+input {
+    font-size: 12px;
+}
+.v-text-field input {
+    padding: 2px 0;
+}
 </style>
