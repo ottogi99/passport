@@ -5,7 +5,9 @@
         <v-form v-model="valid" ref="form">
             <v-container>
                 <v-row>
-                    <v-col cols="2" class="ps-4">
+                    <v-spacer></v-spacer>
+
+                    <v-col cols="2">
                         <v-combobox
                             v-model="selectedYear"
                             :items="years"
@@ -15,7 +17,7 @@
                             dense
                         ></v-combobox>
                     </v-col>
-                    <v-col cols="2" class="px-1">
+                    <v-col cols="2">
                         <v-combobox
                             v-model="selectedSigun"
                             :items="siguns"
@@ -27,7 +29,7 @@
                             dense
                         ></v-combobox>
                     </v-col>
-                    <v-col cols="2" class="px-1">
+                    <v-col cols="2">
                         <v-combobox
                             v-model="selectedNonghyup"
                             :items="nonghyups"
@@ -40,60 +42,10 @@
                         ></v-combobox>
                     </v-col>
 
-                    <v-col cols="2" class="px-1">
-                        <v-menu
-                            v-model="menu1"
-                            :close-on-content-click="true"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="auto"
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-text-field class="pa-0"
-                                    v-model="startDate"
-                                    label="시작일"
-                                    prepend-icon="mdi-calendar"
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker
-                                v-model="startDate"
-                            ></v-date-picker>
-                        </v-menu>
-                    </v-col>
-
-                    <v-col cols="2" class="pe-1">
-                        <v-menu
-                            v-model="menu2"
-                            :close-on-content-click="true"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="auto"
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-text-field class="pa-0"
-                                    v-model="endDate"
-                                    label="종료일"
-                                    prepend-icon="mdi-calendar"
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker
-                                v-model="endDate"
-                            ></v-date-picker>
-                        </v-menu>
-                    </v-col>
-
                     <v-spacer></v-spacer>
 
-                    <v-col cols="3" class="me-2">
-                        <v-autocomplete class="pa-0 pt-1"
+                    <v-col cols="5">
+                        <v-autocomplete
                             v-model="searchString"
                             persistent-hint
                             :items="siguns"
@@ -111,6 +63,8 @@
                             </template>
                         </v-autocomplete>
                     </v-col>
+
+                    <v-spacer></v-spacer>
                 </v-row>
             </v-container>
         </v-form>
@@ -204,5 +158,8 @@ export default {
 </script>
 
 <style scoped>
-
+>>>.v-input--dense>.v-input__control>.v-input__slot {
+    margin-top: 8px !important;
+    margin-bottom: 0px !important;
+}
 </style>

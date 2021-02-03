@@ -1,0 +1,208 @@
+<template>
+    <v-card
+        tile
+    >
+        <v-form v-model="valid" ref="form">
+            <v-container>
+                <v-row>
+                    <v-col cols="2" class="ps-4">
+                        <v-combobox
+                            v-model="selectedYear"
+                            :items="years"
+                            :rules="yearsRules"
+                            label="년도 선택"
+                            outlined
+                            dense
+                        ></v-combobox>
+                    </v-col>
+                    <v-col cols="2" class="px-1">
+                        <v-combobox
+                            v-model="selectedSigun"
+                            :items="siguns"
+                            :rules="sigunsRules"
+                            item-text="name"
+                            item-value="id"
+                            label="시/군 선택"
+                            outlined
+                            dense
+                        ></v-combobox>
+                    </v-col>
+                    <v-col cols="2" class="px-1">
+                        <v-combobox
+                            v-model="selectedNonghyup"
+                            :items="nonghyups"
+                            :rules="nonghyupsRules"
+                            item-text="name"
+                            item-value="id"
+                            label="농협 선택"
+                            outlined
+                            dense
+                        ></v-combobox>
+                    </v-col>
+
+                    <v-col cols="2" class="px-1">
+                        <v-menu
+                            v-model="menu1"
+                            :close-on-content-click="true"
+                            :nudge-right="40"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field class="pa-0"
+                                    v-model="startDate"
+                                    label="시작일"
+                                    prepend-icon="mdi-calendar"
+                                    readonly
+                                    v-bind="attrs"
+                                    v-on="on"
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker
+                                v-model="startDate"
+                            ></v-date-picker>
+                        </v-menu>
+                    </v-col>
+
+                    <v-col cols="2" class="pe-1">
+                        <v-menu
+                            v-model="menu2"
+                            :close-on-content-click="true"
+                            :nudge-right="40"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field class="pa-0"
+                                    v-model="endDate"
+                                    label="종료일"
+                                    prepend-icon="mdi-calendar"
+                                    readonly
+                                    v-bind="attrs"
+                                    v-on="on"
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker
+                                v-model="endDate"
+                            ></v-date-picker>
+                        </v-menu>
+                    </v-col>
+
+                    <v-spacer></v-spacer>
+
+                    <v-col cols="3" class="me-2">
+                        <v-autocomplete class="pa-0 pt-1"
+                            v-model="searchString"
+                            persistent-hint
+                            :items="siguns"
+                            color="ornage"
+                            item-text="name"
+                            item-value="name"
+                            clearable
+                            @keydown.enter="submit"
+                        >
+                            <template v-slot:append-outer>
+                                <v-icon
+                                    @click="onSubmit"
+                                    v-text="'mdi-magnify'"
+                                ></v-icon>
+                            </template>
+                        </v-autocomplete>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-form>
+    </v-card>
+</template>
+
+<script>
+export default {
+    name: 'TopSearchBar',
+
+    props: {
+        siguns: {
+            type: Array,
+        }
+    },
+
+    computed: {
+        years () {
+            const temp = []
+            const currentYear = new Date().getFullYear()
+            for (let i = this.startYear; i <= currentYear; i++) {
+                temp.push(i)
+            }
+            return temp            
+        },
+    },
+
+    data () {
+        return {
+            selectedYear: '',
+            selectedSigun: '',
+            selectedNonghyup: '',
+            searchString: '',
+
+            startYear: 2020,
+            startDate: new Date().toISOString().substr(0, 10),
+            endDate: new Date().toISOString().substr(0, 10),
+
+            menu1: false,
+            menu2: false,
+
+            nonghyups: [
+                { 
+                    name: '천안농협',
+                    id: 1,
+                },
+                {
+                    name: '동천안농협',
+                    id: 2,
+                }                
+            ],
+
+            valid: false,
+
+            yearsRules: [
+                v => !!v || '년도를 선택하세요',
+            ],
+            sigunsRules: [
+                v => !!v || '시/군을 선택하세요',
+            ],
+            nonghyupsRules: [
+                v => !!v || '농협을 선택하세요',
+            ],
+
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 10 || 'Name must be less than 10 characters',
+            ],
+        }
+    },
+
+    methods: {
+        onSubmit () {
+            const isValidated = this.$refs.form.validate()
+            if (isValidated) {
+                const { selectedYear, selectedSigun, selectedNonghyup, searchString } = this
+                console.log({ selectedYear, selectedSigun, selectedNonghyup, searchString })
+                console.log( selectedSigun.id, selectedNonghyup.id );
+                this.$emit('submit', { selectedYear, selectedSigun, selectedNonghyup, searchString })
+            }
+
+            // alert('onSubmit')
+        },
+
+        keydown (e) {
+            const query = e.target.value.trim();
+            console.log(query)
+        },
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

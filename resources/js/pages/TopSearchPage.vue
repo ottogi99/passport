@@ -2,6 +2,7 @@
     <div>
         <h3>상단 검색 바</h3>
         <top-search-bar @submit="onSubmit" :siguns="siguns"></top-search-bar>
+        <div class="mt-4"></div>
         <post-list :posts="posts" :loading="loading"></post-list>
     </div>
 </template>

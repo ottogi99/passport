@@ -30,36 +30,13 @@
     </v-simple-table> -->
 
     <v-card>
-        <v-menu
-            v-model="menu2"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-        >
-            <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                    v-model="date"
-                    label="Picker without buttons"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                ></v-text-field>
-            </template>
-            <v-date-picker
-                v-model="date"
-            ></v-date-picker>
-        </v-menu>
-
-        <v-card-title>
+         <v-card-title>
             Posts
             <v-spacer></v-spacer>
             <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="검색"
+                label="결과내 검색"
                 single-line
                 hide-details
             ></v-text-field>
