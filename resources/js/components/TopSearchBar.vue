@@ -23,7 +23,7 @@
                             :items="siguns"
                             :rules="sigunsRules"
                             item-text="name"
-                            item-value="id"
+                            item-value="code"
                             label="시/군 선택"
                             outlined
                             dense
@@ -35,7 +35,7 @@
                             :items="nonghyups"
                             :rules="nonghyupsRules"
                             item-text="name"
-                            item-value="id"
+                            item-value="code"
                             label="농협 선택"
                             outlined
                             dense
@@ -78,7 +78,10 @@ export default {
     props: {
         siguns: {
             type: Array,
-        }
+        },
+        nonghyups: {
+            type: Array,
+        },
     },
 
     computed: {
@@ -106,17 +109,6 @@ export default {
             menu1: false,
             menu2: false,
 
-            nonghyups: [
-                { 
-                    name: '천안농협',
-                    id: 1,
-                },
-                {
-                    name: '동천안농협',
-                    id: 2,
-                }                
-            ],
-
             valid: false,
 
             yearsRules: [
@@ -142,7 +134,7 @@ export default {
             if (isValidated) {
                 const { selectedYear, selectedSigun, selectedNonghyup, searchString } = this
                 console.log({ selectedYear, selectedSigun, selectedNonghyup, searchString })
-                console.log( selectedSigun.id, selectedNonghyup.id );
+                // console.log( selectedSigun.id, selectedNonghyup.id );
                 this.$emit('submit', { selectedYear, selectedSigun, selectedNonghyup, searchString })
             }
 

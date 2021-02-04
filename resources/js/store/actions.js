@@ -22,6 +22,13 @@ export default {
         })
     },
 
+    // fetchNonghyupList({ commit }, { params }) {
+    //     return axios.get('/api/nonghyups', { params }).then(res => {
+    //         commit(FETCH_NONGHYUP_LIST, res.data.nonghyups)
+    //     })
+    // },
+
+
     fetchPost({ commit }, postId) {
         console.log(`/api/posts/${postId}`)
         return axios.get(`/api/posts/${postId}`).then(res => {

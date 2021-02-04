@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Nonghyup;
 
@@ -9,27 +10,45 @@ class NonghyupController extends Controller
 {
     public function index(Request $request)
     {
-        // if (!empty($request->get('start_date'))) {
-        //     $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('start_date'));
-        // } else {
-        //     $start_date = Carbon::now();
+        $query = Nonghyup::join('siguns', 'nonghyups.sigun', 'siguns.code')
+                            ->select('nonghyups.*')
+                            ->orderby('siguns.seq')
+                            ->orderBy('seq');
+
+        // if ($request->get('year')) {
+        //     $query->where('year', $request->get('year'));
         // }
 
-        // if (!empty($request->get('end_date'))) {
-        //     $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('end_date'));
-        // } else {
-        //     $end_date = $start_date->copy()->addMonths(1);
-        // }
+        if ($request->get('sigun')) {
+            $query->where('nonghyups.sigun', $request->get('sigun'));
+        }
+
+        if ($request->get('nonghyup')) {
+            $query->where('nonghyups.code', $request->get('nonghyup'));
+        }
+
+        if ($request->get('q')) {
+            $query->where('nonghyups.name', $request->get('q'));
+        }
+
 
         // $posts = Post::whereBetween('created_at', [
         //     $start_date->startOfDay(),
         //     $end_date->endOfDay()
         // ])->orderBy('created_at', 'desc')->get();
-        
-        $nonghyups = Nonghyup::all();
+
+        // $nonghyups = Nonghyup::all();
+        // return response()->json([
+        //     'nonghyups' => $nonghyups,
+        // ], 201);
+
+        $nonghyups = $query->get();
+
+        // Log::debug($nonghyups);
 
         return response()->json([
             'nonghyups' => $nonghyups,
         ], 201);
+
     }
 }
