@@ -120,13 +120,13 @@ export default {
             valid: false,
 
             yearsRules: [
-                v => !!v || '년도를 선택하세요',
+                // v => !!v || '년도를 선택하세요',
             ],
             sigunsRules: [
-                v => !!v || '시/군을 선택하세요',
+                // v => !!v || '시/군을 선택하세요',
             ],
             nonghyupsRules: [
-                v => !!v || '농협을 선택하세요',
+                // v => !!v || '농협을 선택하세요',
             ],
 
             nameRules: [

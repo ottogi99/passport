@@ -22,7 +22,7 @@ class CreateNonghyupsTable extends Migration
             $table->string('addr_part2', 255)->nullable();
             $table->string('contact', 11)->nullable();
             $table->string('ceo', 255)->nullable();
-            $table->string('sigun', 4);
+            $table->string('sigun', 4)->nullable();
             $table->boolean('active')->default(0);
             $table->unsignedSmallInteger('seq')->nullable();
             $table->timestamps();

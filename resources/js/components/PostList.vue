@@ -29,18 +29,7 @@
         </template>
     </v-simple-table> -->
 
-    <v-card>
-         <v-card-title>
-            Posts
-            <v-spacer></v-spacer>
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="결과내 검색"
-                single-line
-                hide-details
-            ></v-text-field>
-        </v-card-title>
+    <div>
         <!-- v-data-table -->
         <v-data-table
             dense
@@ -87,7 +76,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                새 항목
+                                등록
                             </v-btn>
                         </template>
                         <v-card>
@@ -195,14 +184,6 @@
                     mdi-delete
                 </v-icon>
             </template>
-            <template v-slot:no-data>
-                <v-btn
-                    color="primary"
-                    @click="initialize"
-                >
-                    리셋
-                </v-btn>
-            </template>
 
             <!-- 해더 Customize -->
             <template v-slot:header.title="{ header }">
@@ -223,14 +204,6 @@
                 v-model="page"
                 :length="pageCount"
             ></v-pagination>
-            <v-text-field
-                :value="itemsPerPage"
-                label="페이지 당 아이템 수"
-                type="number"
-                min="-1"
-                max="15"
-                @input="itemsPerPage = parseInt($event, 10)"
-            ></v-text-field>
         </div>
 
         <v-snackbar
@@ -249,7 +222,7 @@
                 </v-btn>
             </template>
         </v-snackbar>
-    </v-card>
+    </div>
 </template>
 
 <script>

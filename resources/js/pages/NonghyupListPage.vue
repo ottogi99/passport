@@ -1,26 +1,36 @@
 <template>
-    <div class="post-list-page">
-        <h1>농협 정보</h1>
-        <div>
-            <nonghyup-list-component :nonghyups="nonghyups"></nonghyup-list-component>
-        </div>
-        <v-btn color="success">Success</v-btn>
+    <div>
+        <top-search-bar @submit="onSubmit" :siguns="siguns"></top-search-bar>
+        <div class="mt-4"></div>
+        <nonghyup-list :nonghyups="nonghyups"></nonghyup-list>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import NonghyupListComponent from '../components/NonghyupListComponent'
+import NonghyupList from '../components/NonghyupList'
+import TopSearchBar from '../components/TopSearchBar.vue'
 
 export default {
     name: 'NonghyupListPage',
 
     components: {
-        NonghyupListComponent
+        TopSearchBar,
+        NonghyupList
+    },
+
+    data () {
+        return {
+            siguns: [],
+        }
     },
 
     created () {
-        this.fetchNonghyupList()
+        this.fetchNonghyupList(),
+        axios.get('/api/siguns')
+            .then(res => {
+                this.siguns = res.data.siguns
+            })
     },
 
     computed: {
@@ -28,7 +38,21 @@ export default {
     },
 
     methods: {
-        ...mapActions(['fetchNonghyupList'])
+        ...mapActions(['fetchNonghyupList']),
+
+        onSubmit (payload) {
+            this.loading = true
+
+            axios.get('/api/nonghyups')
+                .then(res => {
+                    // console.log(res.data)
+                    this.posts = res.data.nonghyups
+                    // console.log(this.posts)
+                    this.loading = false
+                })
+
+            return ''
+        }
     }
 }
 </script>

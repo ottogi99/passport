@@ -269,6 +269,14 @@ const router = new VueRouter({
                 default: TopSearchPage,
             }
         },
+        {
+            path: '/nonghyup',
+            name: 'NonghyupListPage',
+            components: {
+                // header: AppHeader,
+                default: NonghyupListPage,
+            }
+        },
     ],
 })
 

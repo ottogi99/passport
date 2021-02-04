@@ -351,6 +351,10 @@ export default {
                             title: '툴바',
                             to: '/toolbar',
                         },
+                        {
+                            title: '농협',
+                            to: '/nonghyup',
+                        },
                     ],
                 },
             ],
