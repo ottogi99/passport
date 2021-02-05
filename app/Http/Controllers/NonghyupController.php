@@ -19,6 +19,8 @@ class NonghyupController extends Controller
         //     $query->where('year', $request->get('year'));
         // }
 
+        Log::debug('sigun: '.$request->get('sigun'));
+
         if ($request->get('sigun')) {
             $query->where('nonghyups.sigun', $request->get('sigun'));
         }

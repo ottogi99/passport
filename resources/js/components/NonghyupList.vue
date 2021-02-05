@@ -104,10 +104,38 @@
                                             sm="6"
                                             md="4"
                                         >
-                                            <v-text-field
+                                            <v-combobox
+                                                v-model="editedItem.sigun.name"
+                                                :items="siguns"
+                                                item-text="name"
+                                                item-value="code"
+                                                label="시/군 선택"
+                                                outlined
+                                                dense
+                                            ></v-combobox>
+                                            <!-- <v-text-field
+                                                v-model="editedItem.sigun.name"
+                                                label="시군명"
+                                            ></v-text-field> -->
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-combobox
                                                 v-model="editedItem.name"
-                                                label="제목"
-                                            ></v-text-field>
+                                                :items="nonghyups"
+                                                item-text="name"
+                                                item-value="code"
+                                                label="농협 선택"
+                                                outlined
+                                                dense
+                                            ></v-combobox>
+                                            <!-- <v-text-field
+                                                v-model="editedItem.name"
+                                                label="농협명"
+                                            ></v-text-field> -->
                                         </v-col>
                                         <v-col
                                             cols="12"
@@ -116,8 +144,72 @@
                                         >
                                             <v-text-field
                                                 v-model="editedItem.code"
-                                                lable="내용"
+                                                label="코드"
                                             ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-text-field
+                                                v-model="editedItem.address"
+                                                label="주소"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-text-field
+                                                v-model="editedItem.contact"
+                                                label="연락처"
+                                                clearable
+                                                counter=11
+                                                :rules="[v => !!v || 'This field is required',v => /^\d+$/.test(v)||'공백없이 숫자만 입력하세요']"
+                                                @keypress="acceptNumber($event)"
+
+                                                style="ime-mode:disabled"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-text-field
+                                                v-model="editedItem.ceo"
+                                                label="대표자"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-combobox
+                                                v-model="editedItem.active"
+                                                :items="[{name:'활동', code:true}, {name:'중지', code: false}]"
+                                                item-text="name"
+                                                item-value="code"
+                                                label="상태"
+                                                outlined
+                                                dense
+                                            ></v-combobox>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-combobox
+                                                v-model="editedItem.seq"
+                                                :items="Array.from(Array(100).keys(), i=>i+1)"
+                                                label="순번"
+                                                outlined
+                                                dense
+                                            ></v-combobox>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -242,6 +334,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'NonghyupList',
 
@@ -256,6 +350,9 @@ export default {
 
     data () {
         return {
+            selectedNonghyup: '',
+            selectedSigun: '',
+            siguns: [],
             date: new Date().toISOString().substr(0, 10),
             menu2: false,
 
@@ -280,8 +377,17 @@ export default {
             _posts: [],
             editedIndex: -1,
             editedItem: {
+                sigun: {
+                    name: '',
+                    code: ''
+                },
                 name: '',
-                code: ''
+                code: '',
+                address: '',
+                contact: '',
+                ceo: '',
+                active: '',
+                seq: '',
             },
             defaultItem: {
                 name: '',
@@ -311,6 +417,8 @@ export default {
     },
 
     computed: {
+        ...mapState([ 'me' ]),
+
         nonghyupsWithIndex () {
             return this.nonghyups.map(
                 (nonghyup, index) => ({
@@ -330,7 +438,9 @@ export default {
                 header => ({
                     ...header,
                     // 여기 조건에 사용자가 관리자이면 Action의 show값이 true 아니면 false로 설정
-                    show: header.text === 'Actions' ? false : true,
+                    show: (header.text === 'Actions') 
+                        ? this.me.roles.filter(v => { return v.code === 'master'}).length > 0
+                        : true
                 })
             ).filter(v=>v.show)
         }
@@ -347,6 +457,17 @@ export default {
 
     created () {
         // this.initialize()
+        // this.fetchNonghyupList(),
+        axios.get('/api/siguns')
+            .then(res => {
+                this.siguns = res.data.siguns
+
+                const all = {
+                    code: '',
+                    name: '전체',
+                }
+                this.siguns.splice(0, 0, all)
+            })
     },
 
     methods: {
@@ -355,9 +476,11 @@ export default {
         },
 
         editItem (item) {
-            // console.log('item: '+ JSON.stringify(item))
+            console.log('item: '+ JSON.stringify(item))
             this.editedIndex = this.nonghyups.indexOf(item)
             this.editedItem = Object.assign({}, item)
+
+            this.editedItem.active = this.editedItem.active === true ? '활동' : '중지'
             this.dialog = true
         },
 
@@ -413,8 +536,27 @@ export default {
             this.snackColor = 'info'
             this.snackText = 'Dialog opened'
         },
-        close () {
-            console.log('Dialog closed')
+        acceptNumber($event) {
+            let keyCode = $event.keyCode ? $event.keyCode : $event.which
+            console.log(`keyCode: ${keyCode}`)
+
+            let text = this.editItem.contact
+            // 한글 정규식
+            const notPhoneticSymbolExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+            if (notPhoneticSymbolExp.test(text)) {
+                console.log('ohmygod')
+                text = text.slice(0, -1);
+                let condition = notPhoneticSymbolExp.test(text);
+                while (condition) {
+                    text = text.slice(0, -1);
+                    condition = notPhoneticSymbolExp.test(text);
+                }
+            }
+
+            this.editItem.contact = text
+            // if (keyCode > 31 && (keyCode < 48 || keyCode > 57)) {
+            //     $event.preventDefault();
+            // }
         }
     }
 }

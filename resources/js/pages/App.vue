@@ -395,7 +395,6 @@ export default {
                 ['mdi-plus-outline', '사용자매뉴얼'],
                 ['mdi-plus-outline', '건의사항'],
             ]
-            
         }
     }
 }

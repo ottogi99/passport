@@ -1,6 +1,6 @@
 <template>
     <div>
-        <top-search-bar @submit="onSubmit" :siguns="siguns" :nonghyups="nonghyups"></top-search-bar>
+        <top-search-bar @submit="onSubmit" :siguns="siguns"></top-search-bar>
         <div class="mt-4"></div>
         <nonghyup-list :nonghyups="nonghyups"></nonghyup-list>
     </div>
@@ -22,12 +22,11 @@ export default {
     data () {
         return {
             siguns: [],
-            nonghyups: [],
         }
     },
 
     created () {
-        // this.fetchNonghyupList(),
+        this.fetchNonghyupList(),
         axios.get('/api/siguns')
             .then(res => {
                 this.siguns = res.data.siguns
@@ -41,12 +40,10 @@ export default {
     },
 
     computed: {
-        // ...mapState(['nonghyups']),
+        ...mapState(['nonghyups']),
     },
 
     methods: {
-        ...mapActions(['fetchNonghyupList']),
-
         onSubmit (payload) {
             this.loading = true
 
@@ -58,16 +55,19 @@ export default {
                 q: searchString,
             }
 
-            axios.get('/api/nonghyups', { params })
-                .then(res => {
-                    // console.log(res.data)
-                    this.nonghyups = res.data.nonghyups
-                    // console.log(this.posts)
-                    this.loading = false
-                })
+            this.fetchNonghyupList(params)
 
-            return ''
-        }
+            // axios.get('/api/nonghyups', { params })
+            //     .then(res => {
+            //         // console.log(res.data)
+            //         this.nonghyups = res.data.nonghyups
+            //         // console.log(this.posts)
+            //         this.loading = false
+            //     })
+
+            // return ''
+        },
+        ...mapActions(['fetchNonghyupList']),
     }
 }
 </script>

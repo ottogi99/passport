@@ -16,17 +16,18 @@ export default {
         })
     },
 
-    fetchNonghyupList({ commit }) {
-        return axios.get('/api/nonghyups').then(res => {
-            commit(FETCH_NONGHYUP_LIST, res.data.nonghyups)
-        })
-    },
-
-    // fetchNonghyupList({ commit }, { params }) {
-    //     return axios.get('/api/nonghyups', { params }).then(res => {
+    // fetchNonghyupList({ commit }) {
+    //     return axios.get('/api/nonghyups').then(res => {
     //         commit(FETCH_NONGHYUP_LIST, res.data.nonghyups)
     //     })
     // },
+
+    fetchNonghyupList({ commit }, params) {
+        // console.log('params: ' + JSON.stringify(params));
+        return axios.get('/api/nonghyups', { params }).then(res => {
+            commit(FETCH_NONGHYUP_LIST, res.data.nonghyups)
+        })
+    },
 
 
     fetchPost({ commit }, postId) {

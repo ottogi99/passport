@@ -7,7 +7,7 @@
                 <v-row>
                     <v-spacer></v-spacer>
 
-                    <v-col cols="2">
+                    <v-col cols="2" v-if="years">
                         <v-combobox
                             v-model="selectedYear"
                             :items="years"
@@ -34,6 +34,7 @@
                             v-model="selectedNonghyup"
                             :items="nonghyups"
                             :rules="nonghyupsRules"
+                            :loading="loading"
                             item-text="name"
                             item-value="code"
                             label="농협 선택"
@@ -76,27 +77,21 @@ export default {
     name: 'TopSearchBar',
 
     props: {
+        years: {
+            type: Array,
+        },
         siguns: {
             type: Array,
         },
-        nonghyups: {
-            type: Array,
-        },
-    },
-
-    computed: {
-        years () {
-            const temp = []
-            const currentYear = new Date().getFullYear()
-            for (let i = this.startYear; i <= currentYear; i++) {
-                temp.push(i)
-            }
-            return temp            
-        },
+        // nonghyups: {
+        //     type: Array,
+        // },
     },
 
     data () {
         return {
+            loading: false,
+            nonghyups: [],
             selectedYear: '',
             selectedSigun: '',
             selectedNonghyup: '',
@@ -128,12 +123,27 @@ export default {
         }
     },
 
+    computed: {
+        // years () {
+        //     const temp = []
+        //     const currentYear = new Date().getFullYear()
+        //     for (let i = this.startYear; i <= currentYear; i++) {
+        //         temp.push(i)
+        //     }
+        //     return temp            
+        // },
+    },
+
+    created () {       
+        this.nonghyups = this.getNonghyupList()
+    },
+
     methods: {
         onSubmit () {
             const isValidated = this.$refs.form.validate()
             if (isValidated) {
                 const { selectedYear, selectedSigun, selectedNonghyup, searchString } = this
-                console.log({ selectedYear, selectedSigun, selectedNonghyup, searchString })
+                // console.log({ selectedYear, selectedSigun, selectedNonghyup, searchString })
                 // console.log( selectedSigun.id, selectedNonghyup.id );
                 this.$emit('submit', { selectedYear, selectedSigun, selectedNonghyup, searchString })
             }
@@ -145,7 +155,50 @@ export default {
             const query = e.target.value.trim();
             console.log(query)
         },
-    }
+
+        getNonghyupList (params) {
+            axios.get('/api/nonghyups', { params })
+                .then(res => {
+                    this.nonghyups = res.data.nonghyups
+
+                    const all = {
+                        code: '',
+                        name: '전체',
+                    }
+                    this.nonghyups.splice(0, 0, all)
+                    // this.selectedNonghyup = null
+                    this.selectedNonghyup = this.nonghyups[0]
+                })
+                .finally(() => {
+                    this.loading = false
+                })
+        },        
+    },
+
+    watch: {
+        selectedSigun: function (val) {
+            this.loading = true
+            const payload = { 
+                sigun: val.code,
+            }
+            this.nonghyups = this.getNonghyupList(payload)
+
+            // axios.get('/api/nonghyups', { params })
+            //     .then(res => {
+            //         // console.log(res.data)
+            //         this.nonghyups = res.data.nonghyups
+            //         // console.log(this.posts)
+            //         this.loading = false
+            //     })
+        },
+
+        // 시군 prop 가 비동기로 동작하므로 created () 에 넣으면 동작되지 않는다.
+        siguns: function (siguns) {
+            if (siguns.length > 1)
+                this.selectedSigun = siguns[0]
+        },
+
+    },
 }
 </script>
 

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 /*
@@ -69,7 +70,7 @@ Route::post('/signin', function (Request $request) {
 });
 
 Route::middleware('auth:api')->get('/user/me', function (Request $request) {
-    $me = Auth::user();
+    $me = App\User::with('roles')->find(Auth::user()->id);
     
     return response()->json([
         'me' => $me
