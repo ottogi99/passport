@@ -24,7 +24,7 @@ Route::prefix('siguns')->group(function () {
 
 Route::prefix('nonghyups')->group(function () {
     Route::get('/', 'NonghyupController@index');
-    // Route::post('/', 'PostController@store');
+    Route::post('/', 'NonghyupController@store');
     Route::patch('/{id}', 'NonghyupController@update');
     Route::delete('/{id}', 'NonghyupController@destroy');
 });
@@ -55,10 +55,10 @@ Route::post('/signin', function (Request $request) {
             // Asus labtop in office
             // 'client_secret' => 'DiM7k1JuL3oUga9TitoOcQaTUe2A7ZcTiCjSz1U4',
             // Lenovo desktop at home
-            // 'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',
+            'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',
             // Lenovo T14s 용
-            'client_secret' => 'IW0MnIqf2gbFPLGAL9LACWChUXsDmtrMjzTW6x2r',
-            'client_secret' => 'DfPSI4j2SW9jpbygy2eNjSxhtQyNbxqt9cu2f542',
+            // 'client_secret' => 'IW0MnIqf2gbFPLGAL9LACWChUXsDmtrMjzTW6x2r',
+            // 'client_secret' => 'DfPSI4j2SW9jpbygy2eNjSxhtQyNbxqt9cu2f542',
             // Lenovo desktop at home
             // 'client_secret' => 'IKY08TkZfUo5ZXcxFQjlKPaYFnsMnwvya1bYZT1B',
             // Lenovo T14s 용

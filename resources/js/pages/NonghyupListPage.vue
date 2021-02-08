@@ -2,7 +2,7 @@
     <div>
         <top-search-bar @submit="onSubmit" :siguns="siguns"></top-search-bar>
         <div class="mt-4"></div>
-        <nonghyup-list :nonghyups="nonghyups"></nonghyup-list>
+        <nonghyup-list @update="onUpdate" :nonghyups="nonghyups"></nonghyup-list>
     </div>
 </template>
 
@@ -67,6 +67,11 @@ export default {
 
             // return ''
         },
+
+        onUpdate () {
+            this.fetchNonghyupList()
+        },
+
         ...mapActions(['fetchNonghyupList']),
     }
 }

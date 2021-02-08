@@ -105,7 +105,7 @@
                                             md="4"
                                         >
                                             <v-combobox
-                                                v-model="editedItem.sigun.name"
+                                                v-model="editedItem.sigun"
                                                 :items="siguns"
                                                 item-text="name"
                                                 item-value="code"
@@ -123,7 +123,7 @@
                                             sm="6"
                                             md="4"
                                         >
-                                            <v-combobox
+                                            <!-- <v-combobox
                                                 v-model="editedItem.name"
                                                 :items="nonghyups"
                                                 item-text="name"
@@ -131,11 +131,11 @@
                                                 label="농협 선택"
                                                 outlined
                                                 dense
-                                            ></v-combobox>
-                                            <!-- <v-text-field
+                                            ></v-combobox> -->
+                                            <v-text-field
                                                 v-model="editedItem.name"
                                                 label="농협명"
-                                            ></v-text-field> -->
+                                            ></v-text-field>
                                         </v-col>
                                         <v-col
                                             cols="12"
@@ -155,6 +155,7 @@
                                             <v-text-field
                                                 v-model="editedItem.address"
                                                 label="주소"
+                                                clearable
                                             ></v-text-field>
                                         </v-col>
                                         <v-col
@@ -189,6 +190,7 @@
                                             <v-text-field
                                                 v-model="editedItem.ceo"
                                                 label="대표자"
+                                                clearable
                                             ></v-text-field>
                                         </v-col>
                                         <v-col
@@ -196,15 +198,21 @@
                                             sm="6"
                                             md="4"
                                         >
+                                            <v-checkbox
+                                                v-model="editedItem.active"
+                                                label="활성화"
+                                                dense
+                                            ></v-checkbox>
+<!-- 
                                             <v-combobox
                                                 v-model="editedItem.active"
-                                                :items="[{name:'활동', code:true}, {name:'중지', code: false}]"
+                                                :items="[0, 1]"
                                                 item-text="name"
                                                 item-value="code"
                                                 label="상태"
                                                 outlined
                                                 dense
-                                            ></v-combobox>
+                                            ></v-combobox> -->
                                         </v-col>
                                         <v-col
                                             cols="12"
@@ -305,7 +313,7 @@
             <!-- 체크박스 -->
             <template v-slot:item.active="{ item }">
                 <v-simple-checkbox
-                    v-model="item.active"
+                    :value="!!item.active"
                     disabled
                 ></v-simple-checkbox>
             </template>
@@ -354,7 +362,6 @@ export default {
 
     data () {
         return {
-            email: '',
             selectedNonghyup: '',
             selectedSigun: '',
             siguns: [],
@@ -391,8 +398,8 @@ export default {
                 address: '',
                 contact: '',
                 ceo: '',
-                active: '',
-                seq: '',
+                active: false,
+                seq: 0,
             },
             defaultItem: {
                 sigun: {
@@ -404,8 +411,8 @@ export default {
                 address: '',
                 contact: '',
                 ceo: '',
-                active: '',
-                seq: '',
+                active: false,
+                seq: 0,
             },
 
             headers: [
@@ -489,19 +496,21 @@ export default {
         },
 
         editItem (item) {
-            console.log('editItem: '+ JSON.stringify(item))
+            // console.log('editItem: '+ JSON.stringify(item))
             // this.editedIndex = this.nonghyups.indexOf(item)
             this.editedIndex = this.nonghyups.findIndex(v => v.id === item.id)
-            this.editedItem = Object.assign({}, item)
 
-            this.editedItem.active = this.editedItem.active === true ? '활동' : '중지'
+            // Vue waring 제거
+            item.active = !!item.active
+            this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem (item) {
-            console.log('item:' + JSON.stringify(item))
+            // console.log('deleteItem: '+ JSON.stringify(item))
             // this.editedIndex = this.nonghyups.indexOf(item)
             this.editedIndex = this.nonghyups.findIndex(v => v.id === item.id)
+            item.active = !!item.active
             this.editedItem = Object.assign({}, item)
             // console.log('editedItem: ' + JSON.stringify(this.editedItem))
             this.dialogDelete = true
@@ -555,14 +564,14 @@ export default {
 
             // editedItem : sigun 항목은 객체인데 id값만 전달해야함
             // this.editedItem.sigun = this.editedItem.sigun.code
-            // this.editedItem.active = this.editedItem.active === '활동' ? true : false
 
             if (this.editedIndex > -1) { // UPDATE
                 axios.patch(`/api/nonghyups/${this.editedItem.id}`, this.editedItem)
                     .then(res => {
                         console.log(res.data.nonghyup)
                         // const targetIndex = this.nonghyups.findIndex(v => v.id === this.editItem.id)
-                        Object.assign(this.nonghyups[this.editedIndex], this.editedItem)
+                        // Object.assign(this.nonghyups[this.editedIndex], this.editedItem)
+                        Object.assign(this.nonghyups[this.editedIndex], res.data.nonghyup)
 
                         this.snack = true
                         this.snackColor = 'success'
@@ -580,20 +589,26 @@ export default {
                         this.close()
                     })
             } else { // CREATE
-                axios.post('/api/nonghyups/')
+                axios.post('/api/nonghyups/', this.editedItem)
                     .then(res => {
-                        this.nonghyups.push(this.editItem)
+                        console.log('editedItem: ' + JSON.stringify(this.editedItem))
+                        console.log('RES: ' + JSON.stringify(res.data.nonghyup))
+                        this.nonghyups.push(res.data.nonghyup)
 
                         this.snack = true
                         this.snackColor = 'success'
                         this.snackText = '저장 되었습니다.'
+
+                        this.$emit('update')
                     })
                     .catch(err => {
-                        console.log('err =>' + err)
+                        console.log('message =>' + JSON.stringify(err.response.data))
+                        console.log('message =>' + JSON.stringify(err.response.data.message))
+                        console.log('message =>' + err.response.data.message)
 
                         this.snack = true
                         this.snackColor = 'error'
-                        this.snackText = '오류가 발생하였습니다.'
+                        this.snackText = err.response.data.message
                     })
                     .finally(() => {
                         this.close()
@@ -633,13 +648,21 @@ export default {
         },
         // vuetify v-text-field 혹은 vuejs input에서 한글 입력 막기
         filteringHandler(str) {
-            const ONLY_NUMBER_ = /^[0-9]/g
+            // 대소문자 무시 플래그(i), 글로벌(g)
             const ONLY_NUMBER = /[0-9]/g
             const REG_FILTER_KOREAN_LETTER = /[^ㄱ-ㅎㅏ-ㅣ가-힣]*/i
             // const filterdString = str.match(REG_FILTER_KOREAN_LETTER)[0]
-            // const filterdString = str.match(ONLY_NUMBER)[0]
-            const filterdString = str.match(ONLY_NUMBER).join('').substr(0, 11)
-            // console.log(filterdString)
+            let filterdString = ''
+            console.log(str.length)
+            if (str.length > 0) {
+                if (str.length === 1) {
+                    const matched = str.match(ONLY_NUMBER)
+                    filterdString = !!matched ? matched : ''
+                }
+                else {
+                    filterdString = str.match(ONLY_NUMBER).join('').substr(0, 11)
+                }
+            }
 
             const inputField = this.$refs.inputContact
             inputField.lazyValue = filterdString

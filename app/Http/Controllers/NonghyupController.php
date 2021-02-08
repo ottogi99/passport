@@ -19,7 +19,7 @@ class NonghyupController extends Controller
         //     $query->where('year', $request->get('year'));
         // }
 
-        Log::debug('sigun: '.$request->get('sigun'));        
+        // Log::debug('sigun: '.$request->get('sigun'));        
 
         if ($request->get('sigun')) {
             $query->where('nonghyups.sigun', $request->get('sigun'));
@@ -64,6 +64,12 @@ class NonghyupController extends Controller
     {
         Log::debug($request->all());
 
+        Log::debug($request->get('sigun'));
+        $sigun = $request->get('sigun')['code'];
+
+        $payload = array_merge($request->all(), ['sigun' => $sigun]);
+        Log::debug($payload);
+
         // $rules = [
         //     'title' => ['required'],
         //     'content' => ['required', 'min:10'],
@@ -83,29 +89,32 @@ class NonghyupController extends Controller
         // 트레이트 메서드 사용
         // $this->validate($request, $rules, $message);
 
-        $article = \App\Nonghyup::create($request->all());
+        try {
+            $new = Nonghyup::create($payload);
+            $nonghyup = Nonghyup::find($new->id);
+        } catch (\PDOException $e) {
+            $status = 500;
+            $response['message'] = '쿼리 요청을 처리할 수 없습니다.';
+            // return response()->json($response, $status);
 
-        if (! $article) {
-            return back()->with('flash_message', '글이 저장되지 않았습니다.')->withInput();
+            return response()->json($response, $status);
+        } catch (\Exception $e) {
+            Log::debug('In exception');
+            Log::debug($e->getMessage());
         }
 
         return response()->json([
-            'post' => $post,
+            'nonghyup' => $nonghyup,
         ], 200);
     }
 
     public function update(Request $request, $id)
     {
-        Log::debug($request->all());
-        // Log::debug($request->get('sigun')['code']);
-        // Log::debug($request->get('active')['code']);
+        // Log::debug($request->all());
+        Log::debug($request->get('sigun'));
+        $sigun = $request->get('sigun')['code'];
 
-        $sigun = [
-            'sigun' => $request->get('sigun')['code'],
-            'active' => $request->get('active')['code']
-        ];
-        Log::debug($sigun);
-        $payload = array_merge($request->all(), $sigun);
+        $payload = array_merge($request->all(), ['sigun' => $sigun]);
         Log::debug($payload);
 
         $nonghyup = \App\Nonghyup::find($id);

@@ -20,7 +20,6 @@ class Nonghyup extends Model
 
     protected $guarded = [
         'id', 
-        'code'
     ];
 
     protected $with = ['sigun'];

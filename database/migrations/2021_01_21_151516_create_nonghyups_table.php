@@ -15,7 +15,7 @@ class CreateNonghyupsTable extends Migration
     {
         Schema::create('nonghyups', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code', 8);
+            $table->string('code', 8)->unique();
             $table->string('name', 255);
             $table->string('address', 255)->nullable();
             $table->string('addr_part1', 255)->nullable();
@@ -24,7 +24,7 @@ class CreateNonghyupsTable extends Migration
             $table->string('ceo', 255)->nullable();
             $table->string('sigun', 4)->nullable();
             $table->boolean('active')->default(0);
-            $table->unsignedSmallInteger('seq')->nullable();
+            $table->unsignedSmallInteger('seq')->default(1);
             $table->timestamps();
 
             // 외래키

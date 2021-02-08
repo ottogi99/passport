@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -50,6 +51,44 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        Log::index('In render()');
+        Log::debug('isAjax:'.$request->ajax());
+
+        if ($request->ajax()) {
+            if (!empty($exception)) {
+                $response = [
+                    'error' => 'Sorry, can not execute your request',
+                ];
+
+                if (config('app.debug')) {
+                    $reponse['exception'] = get_class($exception);
+                    $reponse['message'] = $exception->getMessage();
+                    $reponse['trace'] = $exception->getTrace();
+                }
+
+                $status = 400;
+
+                if ($exception instanceof ValidationException){
+                    return $this->convertValidationExceptionToResponse($exception, $request);       
+                    // is it authentication exception
+                } else if($exception instanceof AuthenticationException){
+                    $status = 401;
+                    $response['error'] = 'Can not finish authentication!';
+                    //is it DB exception
+                } else if ($exception instanceof \PDOException) {
+                    $status = 500;
+                    $reponse['error'] = 'Can not finish your query requesst!';
+                } else if ($this->isHttpException($exception)) {
+                    $stauts = $exception->getStatusCode();
+                    $reponse['error'] = 'Request error!';
+                } else {
+                    $status = method_exist($exception, 'getStatusCode') ? $exception->getStatusCode() : 400;
+                }
+
+                return response()->json($response, $status);
+            }
+        }
+
         return parent::render($request, $exception);
     }
 }
