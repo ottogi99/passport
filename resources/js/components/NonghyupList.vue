@@ -162,7 +162,7 @@
                                             sm="6"
                                             md="4"
                                         >
-                                            <v-text-field
+                                            <!-- <v-text-field
                                                 v-model="editedItem.contact"
                                                 label="연락처"
                                                 clearable
@@ -171,6 +171,14 @@
                                                 @keypress="acceptNumber($event)"
 
                                                 style="ime-mode:disabled"
+                                            ></v-text-field> -->
+                                            <v-text-field
+                                                :value="editedItem.contact"
+                                                @input="filteringHandler"
+                                                label="연락처"
+                                                clearable
+                                                counter=11
+                                                ref="inputContact"
                                             ></v-text-field>
                                         </v-col>
                                         <v-col
@@ -236,7 +244,7 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="headline">이 아이템을 정말로 삭제하시겠습니까?</v-card-title>
+                            <v-card-title class="headline">아이템({{editedItem.name}})을 정말로 삭제하시겠습니까?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="closeDelete">취소</v-btn>
@@ -249,10 +257,6 @@
             </template>
 
             <template v-slot:item.title="props">
-                <router-link :to="{ name: 'PostViewPage', params: { postId: props.item.id.toString() } }">
-                    {{ props.item.title }}
-                </router-link>
-
                 <v-edit-dialog
                     :return-value.sync="props.item.title"
                     @save="save"
@@ -350,6 +354,7 @@ export default {
 
     data () {
         return {
+            email: '',
             selectedNonghyup: '',
             selectedSigun: '',
             siguns: [],
@@ -390,8 +395,17 @@ export default {
                 seq: '',
             },
             defaultItem: {
+                sigun: {
+                    name: '',
+                    code: ''
+                },
                 name: '',
                 code: '',
+                address: '',
+                contact: '',
+                ceo: '',
+                active: '',
+                seq: '',
             },
 
             headers: [
@@ -404,11 +418,11 @@ export default {
                 { text: '시군명', sortable: false, value: 'sigun.name' },
                 { text: '농협명', value: 'name' },
                 { text: '코드', value: 'code' },
-                { text: '주소', sortable: false,value: 'address' },
-                { text: '연락처', sortable: false,value: 'contact' },
-                { text: '대표자', sortable: false,value: 'ceo' },
-                { text: '상태', sortable: false,value: 'active' },
-                { text: '순번', sortable: false,value: 'seq' },
+                { text: '주소', sortable: false, value: 'address' },
+                { text: '연락처', sortable: false, value: 'contact' },
+                { text: '대표자', sortable: false, value: 'ceo' },
+                { text: '상태', sortable: false, value: 'active' },
+                { text: '순번', sortable: false, value: 'seq' },
                 { text: '등록일자', value: 'created_at' },
                 { text: 'Actions', value: 'actions', sortable: false },
                 // { text: 'ID', value: 'id' },
@@ -424,7 +438,6 @@ export default {
                 (nonghyup, index) => ({
                     ...nonghyup,
                     index: index + 1,
-                    active: false,
                 })
             )
         },
@@ -476,8 +489,9 @@ export default {
         },
 
         editItem (item) {
-            console.log('item: '+ JSON.stringify(item))
-            this.editedIndex = this.nonghyups.indexOf(item)
+            console.log('editItem: '+ JSON.stringify(item))
+            // this.editedIndex = this.nonghyups.indexOf(item)
+            this.editedIndex = this.nonghyups.findIndex(v => v.id === item.id)
             this.editedItem = Object.assign({}, item)
 
             this.editedItem.active = this.editedItem.active === true ? '활동' : '중지'
@@ -485,14 +499,28 @@ export default {
         },
 
         deleteItem (item) {
-            this.editedIndex = this.nonghyups.indexOf(item)
+            console.log('item:' + JSON.stringify(item))
+            // this.editedIndex = this.nonghyups.indexOf(item)
+            this.editedIndex = this.nonghyups.findIndex(v => v.id === item.id)
             this.editedItem = Object.assign({}, item)
+            // console.log('editedItem: ' + JSON.stringify(this.editedItem))
             this.dialogDelete = true
         },
 
-        deleteItemConfirm () {
-            this.nonghyups.splice(this.editedIndex, 1)
-            this.closeDelete()
+        deleteItemConfirm (event) {
+            console.log(this.editedIndex) // undefined
+            axios.delete(`/api/nonghyups/${this.editedItem.id}`)
+                .then(res => {
+                    // const targetIndex = this.nonghyups.findIndex(v => v.id === this.editItem.id)
+                    this.nonghyups.splice(this.editedIndex, 1)
+                })
+                .catch(err => {
+                    console.log('err =>' + err)
+                })
+                .finally(() => {
+                    console.log('finally')
+                    this.closeDelete()
+                })
         },
 
         close () {
@@ -522,9 +550,55 @@ export default {
 
         // v-edit-dialog 사용
         save () {
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = '저장 되었습니다.'
+            // console.log(`save: editedInex: ${this.editedIndex}`)
+            console.log(JSON.stringify(this.editedItem))
+
+            // editedItem : sigun 항목은 객체인데 id값만 전달해야함
+            // this.editedItem.sigun = this.editedItem.sigun.code
+            // this.editedItem.active = this.editedItem.active === '활동' ? true : false
+
+            if (this.editedIndex > -1) { // UPDATE
+                axios.patch(`/api/nonghyups/${this.editedItem.id}`, this.editedItem)
+                    .then(res => {
+                        console.log(res.data.nonghyup)
+                        // const targetIndex = this.nonghyups.findIndex(v => v.id === this.editItem.id)
+                        Object.assign(this.nonghyups[this.editedIndex], this.editedItem)
+
+                        this.snack = true
+                        this.snackColor = 'success'
+                        this.snackText = '저장 되었습니다.'
+                    })
+                    .catch(err => {
+                        console.log('err =>' + err)
+
+                        this.snack = true
+                        this.snackColor = 'error'
+                        this.snackText = '오류가 발생하였습니다.'
+                    })
+                    .finally(() => {
+
+                        this.close()
+                    })
+            } else { // CREATE
+                axios.post('/api/nonghyups/')
+                    .then(res => {
+                        this.nonghyups.push(this.editItem)
+
+                        this.snack = true
+                        this.snackColor = 'success'
+                        this.snackText = '저장 되었습니다.'
+                    })
+                    .catch(err => {
+                        console.log('err =>' + err)
+
+                        this.snack = true
+                        this.snackColor = 'error'
+                        this.snackText = '오류가 발생하였습니다.'
+                    })
+                    .finally(() => {
+                        this.close()
+                    })
+            }            
         },
         cancel () {
             this.snack = true
@@ -540,11 +614,10 @@ export default {
             let keyCode = $event.keyCode ? $event.keyCode : $event.which
             console.log(`keyCode: ${keyCode}`)
 
-            let text = this.editItem.contact
+            let text = this.editedItem.contact
             // 한글 정규식
             const notPhoneticSymbolExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
             if (notPhoneticSymbolExp.test(text)) {
-                console.log('ohmygod')
                 text = text.slice(0, -1);
                 let condition = notPhoneticSymbolExp.test(text);
                 while (condition) {
@@ -553,10 +626,24 @@ export default {
                 }
             }
 
-            this.editItem.contact = text
+            this.editedItem.contact = text
             // if (keyCode > 31 && (keyCode < 48 || keyCode > 57)) {
             //     $event.preventDefault();
             // }
+        },
+        // vuetify v-text-field 혹은 vuejs input에서 한글 입력 막기
+        filteringHandler(str) {
+            const ONLY_NUMBER_ = /^[0-9]/g
+            const ONLY_NUMBER = /[0-9]/g
+            const REG_FILTER_KOREAN_LETTER = /[^ㄱ-ㅎㅏ-ㅣ가-힣]*/i
+            // const filterdString = str.match(REG_FILTER_KOREAN_LETTER)[0]
+            // const filterdString = str.match(ONLY_NUMBER)[0]
+            const filterdString = str.match(ONLY_NUMBER).join('').substr(0, 11)
+            // console.log(filterdString)
+
+            const inputField = this.$refs.inputContact
+            inputField.lazyValue = filterdString
+            this.editedItem.contact = filterdString
         }
     }
 }

@@ -24,6 +24,9 @@ Route::prefix('siguns')->group(function () {
 
 Route::prefix('nonghyups')->group(function () {
     Route::get('/', 'NonghyupController@index');
+    // Route::post('/', 'PostController@store');
+    Route::patch('/{id}', 'NonghyupController@update');
+    Route::delete('/{id}', 'NonghyupController@destroy');
 });
 
 // Route::middleware('auth:api')->prefix('posts')->group(function () {
